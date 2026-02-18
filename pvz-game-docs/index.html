@@ -302,11 +302,6 @@
             canvas.width = CANVAS_WIDTH;
             canvas.height = CANVAS_HEIGHT;
             
-            // 响应式窗口大小变化
-            window.addEventListener('resize', () => {
-                location.reload();
-            });
-            
             // 初始化网格
             for (let row = 0; row < GRID_ROWS; row++) {
                 gameState.grid[row] = [];
