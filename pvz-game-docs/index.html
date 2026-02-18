@@ -22,12 +22,15 @@
         
         h1 {
             color: #4CAF50;
-            margin: 20px 0;
+            margin: 10px 0;
+            font-size: clamp(18px, 5vw, 32px);
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
         
         #game-container {
             position: relative;
+            width: 100%;
+            max-width: 900px;
             background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 15%, #228B22 15%, #228B22 100%);
             border: 4px solid #333;
             border-radius: 8px;
@@ -36,15 +39,19 @@
         
         #gameCanvas {
             display: block;
+            width: 100%;
+            height: auto;
         }
         
         #ui-panel {
             display: flex;
-            gap: 20px;
-            padding: 15px 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px;
             background: linear-gradient(to bottom, #444, #333);
             border-radius: 0 0 8px 8px;
             align-items: center;
+            justify-content: center;
         }
         
         .stat {
@@ -62,12 +69,14 @@
         
         #plant-cards {
             display: flex;
-            gap: 10px;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
         
         .plant-card {
-            width: 70px;
-            height: 80px;
+            width: clamp(50px, 15vw, 70px);
+            height: clamp(60px, 15vw, 80px);
             background: linear-gradient(to bottom, #666, #444);
             border: 3px solid #888;
             border-radius: 8px;
@@ -79,6 +88,7 @@
             padding: 5px;
             transition: all 0.2s;
             position: relative;
+            font-size: clamp(10px, 3vw, 14px);
         }
         
         .plant-card:hover {
@@ -179,7 +189,7 @@
     <h1>🌻 植物大战僵尸 🌻</h1>
     
     <div id="game-container">
-        <canvas id="gameCanvas" width="900" height="500"></canvas>
+        <canvas id="gameCanvas"></canvas>
         
         <div id="game-over">
             <h2>GAME OVER</h2>
@@ -239,9 +249,20 @@
 
     <script>
         // ========== 游戏配置 ==========
-        const CANVAS_WIDTH = 900;
-        const CANVAS_HEIGHT = 500;
-        const GRID_SIZE = 100;
+        function getCanvasSize() {
+            const maxWidth = Math.min(window.innerWidth - 20, 900);
+            const maxHeight = Math.min(window.innerHeight - 200, 500);
+            const size = Math.min(maxWidth, maxHeight * 1.8);
+            return {
+                width: Math.max(320, size),
+                height: Math.max(200, size / 1.8)
+            };
+        }
+        
+        const canvasSize = getCanvasSize();
+        const CANVAS_WIDTH = canvasSize.width;
+        const CANVAS_HEIGHT = canvasSize.height;
+        const GRID_SIZE = CANVAS_WIDTH / 9;
         const GRID_COLS = 9;
         const GRID_ROWS = 4;
         
@@ -276,6 +297,15 @@
         function init() {
             canvas = document.getElementById('gameCanvas');
             ctx = canvas.getContext('2d');
+            
+            // 设置画布大小
+            canvas.width = CANVAS_WIDTH;
+            canvas.height = CANVAS_HEIGHT;
+            
+            // 响应式窗口大小变化
+            window.addEventListener('resize', () => {
+                location.reload();
+            });
             
             // 初始化网格
             for (let row = 0; row < GRID_ROWS; row++) {
