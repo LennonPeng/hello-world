@@ -217,27 +217,27 @@
         <div id="plant-cards">
             <div class="plant-card" data-plant="peashooter" data-cost="100" onclick="selectPlant(0)">
                 <span class="plant-key">1</span>
-                <span class="plant-icon">🟢</span>
+                <span class="plant-icon" style="color:#4CAF50;font-weight:bold;">P</span>
                 <span class="plant-cost">100</span>
             </div>
             <div class="plant-card" data-plant="sunflower" data-cost="50" onclick="selectPlant(1)">
                 <span class="plant-key">2</span>
-                <span class="plant-icon">🌻</span>
+                <span class="plant-icon" style="color:#FFD700;font-weight:bold;">S</span>
                 <span class="plant-cost">50</span>
             </div>
             <div class="plant-card" data-plant="wallnut" data-cost="50" onclick="selectPlant(2)">
                 <span class="plant-key">3</span>
-                <span class="plant-icon">🥜</span>
+                <span class="plant-icon" style="color:#8B4513;font-weight:bold;">N</span>
                 <span class="plant-cost">50</span>
             </div>
             <div class="plant-card" data-plant="snowpea" data-cost="175" onclick="selectPlant(3)">
                 <span class="plant-key">4</span>
-                <span class="plant-icon">🧊</span>
+                <span class="plant-icon" style="color:#00BCD4;font-weight:bold;">F</span>
                 <span class="plant-cost">175</span>
             </div>
             <div class="plant-card" data-plant="cherrybomb" data-cost="150" onclick="selectPlant(4)">
                 <span class="plant-key">5</span>
-                <span class="plant-icon">🍒</span>
+                <span class="plant-icon" style="color:#E53935;font-weight:bold;">C</span>
                 <span class="plant-cost">150</span>
             </div>
         </div>
@@ -467,16 +467,35 @@
             ctx.fillStyle = '#87CEEB';
             ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT * 0.15);
             
-            // 草地
-            ctx.fillStyle = '#228B22';
+            // 太阳
+            ctx.fillStyle = '#FFD700';
+            ctx.beginPath();
+            ctx.arc(CANVAS_WIDTH - 60, 40, 25, 0, Math.PI * 2);
+            ctx.fill();
+            // 太阳光芒
+            ctx.strokeStyle = '#FFA000';
+            ctx.lineWidth = 3;
+            for (let i = 0; i < 8; i++) {
+                const angle = (i / 8) * Math.PI * 2;
+                ctx.beginPath();
+                ctx.moveTo(CANVAS_WIDTH - 60 + Math.cos(angle) * 30, 40 + Math.sin(angle) * 30);
+                ctx.lineTo(CANVAS_WIDTH - 60 + Math.cos(angle) * 40, 40 + Math.sin(angle) * 40);
+                ctx.stroke();
+            }
+            
+            // 草地 - 带渐变
+            const grassGradient = ctx.createLinearGradient(0, CANVAS_HEIGHT * 0.15, 0, CANVAS_HEIGHT);
+            grassGradient.addColorStop(0, '#4CAF50');
+            grassGradient.addColorStop(1, '#2E7D32');
+            ctx.fillStyle = grassGradient;
             ctx.fillRect(0, CANVAS_HEIGHT * 0.15, CANVAS_WIDTH, CANVAS_HEIGHT * 0.85);
             
-            // 绘制网格
+            // 绘制草坪格子
             for (let row = 0; row < GRID_ROWS; row++) {
                 for (let col = 0; col < GRID_COLS; col++) {
-                    ctx.strokeStyle = 'rgba(0,0,0,0.2)';
-                    ctx.lineWidth = 1;
-                    ctx.strokeRect(col * GRID_SIZE, CANVAS_HEIGHT * 0.15 + row * GRID_SIZE, GRID_SIZE, GRID_SIZE);
+                    // 交替颜色
+                    ctx.fillStyle = (row + col) % 2 === 0 ? 'rgba(0,0,0,0.05)' : 'rgba(0,0,0,0.1)';
+                    ctx.fillRect(col * GRID_SIZE, CANVAS_HEIGHT * 0.15 + row * GRID_SIZE, GRID_SIZE, GRID_SIZE);
                 }
             }
             
@@ -552,21 +571,127 @@
             }
             
             render(ctx) {
-                const data = PLANTS_DATA[this.type];
+                const scale = GRID_SIZE / 100;
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.scale(scale, scale);
                 
-                // 植物身体
-                ctx.font = '40px Arial';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(data.emoji, this.x, this.y);
+                if (this.type === 'peashooter') {
+                    // 豌豆射手 - 绿色头部 + 嘴巴
+                    ctx.fillStyle = '#2E7D32';
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, 25, 30, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    // 嘴巴/发射口
+                    ctx.fillStyle = '#1B5E20';
+                    ctx.beginPath();
+                    ctx.ellipse(20, 5, 12, 8, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    // 眼睛
+                    ctx.fillStyle = 'white';
+                    ctx.beginPath();
+                    ctx.arc(-5, -10, 8, 0, Math.PI * 2);
+                    ctx.arc(5, -10, 8, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.fillStyle = 'black';
+                    ctx.beginPath();
+                    ctx.arc(-3, -10, 4, 0, Math.PI * 2);
+                    ctx.arc(7, -10, 4, 0, Math.PI * 2);
+                    ctx.fill();
+                    // 叶子
+                    ctx.fillStyle = '#4CAF50';
+                    ctx.beginPath();
+                    ctx.ellipse(-20, 20, 15, 8, -0.5, 0, Math.PI * 2);
+                    ctx.ellipse(20, 20, 15, 8, 0.5, 0, Math.PI * 2);
+                    ctx.fill();
+                } else if (this.type === 'sunflower') {
+                    // 向日葵 - 黄色花瓣 + 棕色花心
+                    // 花瓣
+                    ctx.fillStyle = '#FFD700';
+                    for (let i = 0; i < 8; i++) {
+                        ctx.beginPath();
+                        const angle = (i / 8) * Math.PI * 2;
+                        ctx.ellipse(Math.cos(angle) * 20, Math.sin(angle) * 20, 15, 8, angle, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                    // 花心
+                    ctx.fillStyle = '#8B4513';
+                    ctx.beginPath();
+                    ctx.arc(0, 0, 15, 0, Math.PI * 2);
+                    ctx.fill();
+                    // 叶子
+                    ctx.fillStyle = '#4CAF50';
+                    ctx.beginPath();
+                    ctx.ellipse(-25, 20, 18, 10, -0.3, 0, Math.PI * 2);
+                    ctx.ellipse(25, 20, 18, 10, 0.3, 0, Math.PI * 2);
+                    ctx.fill();
+                } else if (this.type === 'wallnut') {
+                    // 坚果墙 - 棕色椭圆
+                    ctx.fillStyle = '#8B4513';
+                    ctx.beginPath();
+                    ctx.ellipse(0, 5, 30, 35, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    // 裂纹
+                    ctx.strokeStyle = '#5D4037';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(-10, -15);
+                    ctx.lineTo(5, 10);
+                    ctx.lineTo(-5, 25);
+                    ctx.moveTo(10, -10);
+                    ctx.lineTo(15, 15);
+                    ctx.stroke();
+                    // 表情
+                    ctx.fillStyle = '#3E2723';
+                    ctx.beginPath();
+                    ctx.arc(-10, -5, 5, 0, Math.PI * 2);
+                    ctx.arc(10, -5, 5, 0, Math.PI * 2);
+                    ctx.fill();
+                } else if (this.type === 'snowpea') {
+                    // 寒冰射手 - 蓝绿色
+                    ctx.fillStyle = '#00897B';
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, 25, 30, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    // 帽子
+                    ctx.fillStyle = '#4DD0E1';
+                    ctx.beginPath();
+                    ctx.ellipse(0, -25, 20, 10, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    // 眼睛
+                    ctx.fillStyle = 'white';
+                    ctx.beginPath();
+                    ctx.arc(-5, -5, 8, 0, Math.PI * 2);
+                    ctx.arc(5, -5, 8, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.fillStyle = 'black';
+                    ctx.beginPath();
+                    ctx.arc(-3, -5, 4, 0, Math.PI * 2);
+                    ctx.arc(7, -5, 4, 0, Math.PI * 2);
+                    ctx.fill();
+                } else if (this.type === 'cherrybomb') {
+                    // 樱桃炸弹 - 两个红樱桃
+                    ctx.fillStyle = '#C62828';
+                    ctx.beginPath();
+                    ctx.arc(-10, 0, 18, 0, Math.PI * 2);
+                    ctx.arc(10, 0, 18, 0, Math.PI * 2);
+                    ctx.fill();
+                    // 叶子
+                    ctx.fillStyle = '#4CAF50';
+                    ctx.beginPath();
+                    ctx.ellipse(0, -15, 12, 6, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
+                ctx.restore();
                 
                 // 血条
                 const hpRatio = this.hp / this.maxHp;
                 const barWidth = 60;
                 ctx.fillStyle = '#333';
-                ctx.fillRect(this.x - barWidth/2, this.y - 35, barWidth, 6);
+                ctx.fillRect(this.x - barWidth/2, this.y - GRID_SIZE/2 - 10, barWidth, 6);
                 ctx.fillStyle = hpRatio > 0.5 ? '#4CAF50' : hpRatio > 0.25 ? '#FF9800' : '#f44336';
-                ctx.fillRect(this.x - barWidth/2, this.y - 35, barWidth * hpRatio, 6);
+                ctx.fillRect(this.x - barWidth/2, this.y - GRID_SIZE/2 - 10, barWidth * hpRatio, 6);
             }
         }
         
@@ -614,24 +739,59 @@
             }
             
             render(ctx) {
-                // 绘制僵尸
-                ctx.font = '45px Arial';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
+                const scale = GRID_SIZE / 100;
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.scale(scale, scale);
                 
                 if (this.frozen) {
                     ctx.globalAlpha = 0.7;
                 }
-                ctx.fillText(this.emoji, this.x, this.y + 15);
-                ctx.globalAlpha = 1;
+                
+                // 僵尸身体 - 灰绿色
+                const bodyColor = this.maxHp > 200 ? '#5D4037' : this.maxHp > 100 ? '#6D6D6D' : '#7CB342';
+                ctx.fillStyle = bodyColor;
+                // 身体
+                ctx.beginPath();
+                ctx.ellipse(0, 0, 20, 35, 0, 0, Math.PI * 2);
+                ctx.fill();
+                // 头
+                ctx.fillStyle = this.maxHp > 200 ? '#4E342E' : '#616161';
+                ctx.beginPath();
+                ctx.arc(0, -30, 18, 0, Math.PI * 2);
+                ctx.fill();
+                // 眼睛
+                ctx.fillStyle = 'white';
+                ctx.beginPath();
+                ctx.arc(-6, -32, 5, 0, Math.PI * 2);
+                ctx.arc(6, -32, 5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#C62828';
+                ctx.beginPath();
+                ctx.arc(-4, -32, 2, 0, Math.PI * 2);
+                ctx.arc(8, -32, 2, 0, Math.PI * 2);
+                ctx.fill();
+                // 嘴巴
+                ctx.fillStyle = '#3E2723';
+                ctx.beginPath();
+                ctx.ellipse(0, -22, 8, 5, 0, 0, Math.PI * 2);
+                ctx.fill();
+                // 手臂
+                ctx.fillStyle = bodyColor;
+                ctx.beginPath();
+                ctx.ellipse(-25, 0, 8, 20, 0.3, 0, Math.PI * 2);
+                ctx.ellipse(25, 0, 8, 20, -0.3, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.restore();
                 
                 // 血条
                 const hpRatio = this.hp / this.maxHp;
                 const barWidth = 50;
                 ctx.fillStyle = '#333';
-                ctx.fillRect(this.x - barWidth/2, this.y - 20, barWidth, 5);
+                ctx.fillRect(this.x - barWidth/2, this.y - GRID_SIZE/2 - 15, barWidth, 5);
                 ctx.fillStyle = hpRatio > 0.5 ? '#4CAF50' : '#f44336';
-                ctx.fillRect(this.x - barWidth/2, this.y - 20, barWidth * hpRatio, 5);
+                ctx.fillRect(this.x - barWidth/2, this.y - GRID_SIZE/2 - 15, barWidth * hpRatio, 5);
             }
         }
         
