@@ -1,0 +1,155 @@
+{
+  "symbol": "510300",
+  "name": "沪深300ETF",
+  "period": {
+    "start": "2016-02-22",
+    "end": "2026-02-13",
+    "trading_days": 2430
+  },
+  "performance": {
+    "initial_capital": 100000,
+    "final_equity": 30473.2,
+    "total_return": -69.53,
+    "annual_return": -11.59,
+    "sharpe_ratio": 0.68,
+    "max_drawdown": -72.99
+  },
+  "trading": {
+    "total_trades": 14,
+    "winning_trades": 7,
+    "losing_trades": 7,
+    "win_rate": 50.0
+  },
+  "trades": [
+    {
+      "date": "2019-04-26",
+      "action": "BUY",
+      "price": 3.33,
+      "shares": 8997
+    },
+    {
+      "date": "2020-07-06",
+      "action": "SELL",
+      "price": 4.28,
+      "shares": 0,
+      "profit_pct": 28.43
+    },
+    {
+      "date": "2020-11-04",
+      "action": "BUY",
+      "price": 4.39,
+      "shares": 6829
+    },
+    {
+      "date": "2021-02-09",
+      "action": "SELL",
+      "price": 5.26,
+      "shares": 0,
+      "profit_pct": 19.73
+    },
+    {
+      "date": "2021-02-26",
+      "action": "BUY",
+      "price": 4.92,
+      "shares": 6094
+    },
+    {
+      "date": "2021-07-27",
+      "action": "SELL",
+      "price": 4.38,
+      "shares": 0,
+      "profit_pct": -11.04
+    },
+    {
+      "date": "2021-07-29",
+      "action": "BUY",
+      "price": 4.5,
+      "shares": 6669
+    },
+    {
+      "date": "2022-03-07",
+      "action": "SELL",
+      "price": 3.99,
+      "shares": 0,
+      "profit_pct": -11.25
+    },
+    {
+      "date": "2022-03-15",
+      "action": "BUY",
+      "price": 3.64,
+      "shares": 8246
+    },
+    {
+      "date": "2022-10-28",
+      "action": "SELL",
+      "price": 3.25,
+      "shares": 0,
+      "profit_pct": -10.62
+    },
+    {
+      "date": "2023-03-06",
+      "action": "BUY",
+      "price": 3.83,
+      "shares": 7835
+    },
+    {
+      "date": "2023-10-16",
+      "action": "SELL",
+      "price": 3.4,
+      "shares": 0,
+      "profit_pct": -11.08
+    },
+    {
+      "date": "2023-11-06",
+      "action": "BUY",
+      "price": 3.43,
+      "shares": 8747
+    },
+    {
+      "date": "2024-01-08",
+      "action": "SELL",
+      "price": 3.06,
+      "shares": 0,
+      "profit_pct": -10.74
+    },
+    {
+      "date": "2024-01-29",
+      "action": "BUY",
+      "price": 3.1,
+      "shares": 9690
+    },
+    {
+      "date": "2024-09-30",
+      "action": "SELL",
+      "price": 4.01,
+      "shares": 0,
+      "profit_pct": 29.6
+    },
+    {
+      "date": "2024-11-22",
+      "action": "BUY",
+      "price": 3.75,
+      "shares": 7997
+    },
+    {
+      "date": "2025-09-11",
+      "action": "SELL",
+      "price": 4.53,
+      "shares": 0,
+      "profit_pct": 20.64
+    },
+    {
+      "date": "2025-10-21",
+      "action": "BUY",
+      "price": 4.6,
+      "shares": 6523
+    },
+    {
+      "date": "2026-02-13",
+      "action": "SELL",
+      "price": 4.66,
+      "shares": 0,
+      "profit_pct": 1.32
+    }
+  ]
+}

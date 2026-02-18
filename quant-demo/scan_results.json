@@ -1,0 +1,434 @@
+{
+  "scan_time": "2026-02-18T10:00:08.524358",
+  "results": [
+    {
+      "code": "sh000001",
+      "name": "上证指数",
+      "close": 4082.07,
+      "pct_change": 0,
+      "regime": "mean_reversion",
+      "trend": "HOLD",
+      "reversion": "HOLD",
+      "llm": "SKIP",
+      "llm_reason": "",
+      "signal": "HOLD",
+      "score": 0.0,
+      "ma_cross": "金叉"
+    },
+    {
+      "code": "sh000016",
+      "name": "上证50",
+      "close": 3034.35,
+      "pct_change": 0,
+      "regime": "mean_reversion",
+      "trend": "HOLD",
+      "reversion": "HOLD",
+      "llm": "SKIP",
+      "llm_reason": "",
+      "signal": "HOLD",
+      "score": 0.0,
+      "ma_cross": "金叉"
+    },
+    {
+      "code": "sh000300",
+      "name": "沪深300",
+      "close": 4660.41,
+      "pct_change": 0,
+      "regime": "trend_up",
+      "trend": "HOLD",
+      "reversion": "HOLD",
+      "llm": "SKIP",
+      "llm_reason": "",
+      "signal": "HOLD",
+      "score": 0.0,
+      "ma_cross": "金叉"
+    },
+    {
+      "code": "sz399001",
+      "name": "深证成指",
+      "close": 14100.19,
+      "pct_change": 0,
+      "regime": "trend_up",
+      "trend": "HOLD",
+      "reversion": "HOLD",
+      "llm": "SKIP",
+      "llm_reason": "",
+      "signal": "HOLD",
+      "score": 0.0,
+      "ma_cross": "死叉"
+    },
+    {
+      "code": "sz399006",
+      "name": "创业板指",
+      "close": 3275.96,
+      "pct_change": 0,
+      "regime": "trend_up",
+      "trend": "BUY",
+      "reversion": "HOLD",
+      "llm": "SKIP",
+      "llm_reason": "",
+      "signal": "BUY",
+      "score": 0.5,
+      "ma_cross": "金叉"
+    },
+    {
+      "code": "510050",
+      "name": "上证50ETF",
+      "close": 3.11,
+      "pct_change": -1.49,
+      "regime": "mean_reversion",
+      "trend": "HOLD",
+      "reversion": "HOLD",
+      "llm": "SKIP",
+      "llm_reason": "",
+      "signal": "HOLD",
+      "score": 0.0,
+      "ma_cross": "金叉"
+    },
+    {
+      "code": "510300",
+      "name": "沪深300ETF",
+      "close": 4.67,
+      "pct_change": -1.18,
+      "regime": "trend_up",
+      "trend": "HOLD",
+      "reversion": "HOLD",
+      "llm": "SKIP",
+      "llm_reason": "",
+      "signal": "HOLD",
+      "score": 0.0,
+      "ma_cross": "金叉"
+    },
+    {
+      "code": "159919",
+      "name": "券商ETF",
+      "close": 4.87,
+      "pct_change": -1.28,
+      "regime": "trend_up",
+      "trend": "HOLD",
+      "reversion": "HOLD",
+      "llm": "SKIP",
+      "llm_reason": "",
+      "signal": "HOLD",
+      "score": 0.0,
+      "ma_cross": "金叉"
+    },
+    {
+      "code": "512880",
+      "name": "半导体ETF",
+      "close": 1.17,
+      "pct_change": -0.93,
+      "regime": "trend_down",
+      "trend": "HOLD",
+      "reversion": "BUY",
+      "llm": "SKIP",
+      "llm_reason": "",
+      "signal": "BUY",
+      "score": 0.5,
+      "ma_cross": "死叉"
+    },
+    {
+      "code": "159995",
+      "name": "券商ETF",
+      "close": 1.94,
+      "pct_change": 0.16,
+      "regime": "trend_up",
+      "trend": "HOLD",
+      "reversion": "HOLD",
+      "llm": "SKIP",
+      "llm_reason": "",
+      "signal": "HOLD",
+      "score": 0.0,
+      "ma_cross": "死叉"
+    },
+    {
+      "code": "159792",
+      "name": "科技创新ETF",
+      "close": 0.83,
+      "pct_change": -0.6,
+      "regime": "trend_down",
+      "trend": "HOLD",
+      "reversion": "BUY",
+      "llm": "SKIP",
+      "llm_reason": "",
+      "signal": "BUY",
+      "score": 0.5,
+      "ma_cross": "死叉"
+    },
+    {
+      "code": "515790",
+      "name": "光伏ETF",
+      "close": 1.09,
+      "pct_change": -3.01,
+      "regime": "mean_reversion",
+      "trend": "HOLD",
+      "reversion": "HOLD",
+      "llm": "SKIP",
+      "llm_reason": "",
+      "signal": "HOLD",
+      "score": 0.0,
+      "ma_cross": "金叉"
+    },
+    {
+      "code": "600519",
+      "name": "贵州茅台",
+      "close": 1485.3,
+      "pct_change": -0.09,
+      "regime": "mean_reversion",
+      "trend": "HOLD",
+      "reversion": "HOLD",
+      "llm": "SKIP",
+      "llm_reason": "",
+      "signal": "HOLD",
+      "score": 0.0,
+      "ma_cross": "金叉"
+    },
+    {
+      "code": "000858",
+      "name": "五粮液",
+      "close": 106.06,
+      "pct_change": 1.38,
+      "regime": "mean_reversion",
+      "trend": "HOLD",
+      "reversion": "HOLD",
+      "llm": "SKIP",
+      "llm_reason": "",
+      "signal": "HOLD",
+      "score": 0.0,
+      "ma_cross": "金叉"
+    },
+    {
+      "code": "601318",
+      "name": "中国平安",
+      "close": 65.29,
+      "pct_change": -1.88,
+      "regime": "trend_up",
+      "trend": "HOLD",
+      "reversion": "HOLD",
+      "llm": "SKIP",
+      "llm_reason": "",
+      "signal": "HOLD",
+      "score": 0.0,
+      "ma_cross": "金叉"
+    },
+    {
+      "code": "600036",
+      "name": "招商银行",
+      "close": 38.71,
+      "pct_change": -0.72,
+      "regime": "trend_down",
+      "trend": "HOLD",
+      "reversion": "HOLD",
+      "llm": "SKIP",
+      "llm_reason": "",
+      "signal": "HOLD",
+      "score": 0.0,
+      "ma_cross": "金叉"
+    },
+    {
+      "code": "000333",
+      "name": "美的集团",
+      "close": 79.05,
+      "pct_change": -0.94,
+      "regime": "mean_reversion",
+      "trend": "HOLD",
+      "reversion": "HOLD",
+      "llm": "SKIP",
+      "llm_reason": "",
+      "signal": "HOLD",
+      "score": 0.0,
+      "ma_cross": "金叉"
+    },
+    {
+      "code": "002594",
+      "name": "比亚迪",
+      "close": 90.27,
+      "pct_change": -0.98,
+      "regime": "trend_down",
+      "trend": "HOLD",
+      "reversion": "HOLD",
+      "llm": "SKIP",
+      "llm_reason": "",
+      "signal": "HOLD",
+      "score": 0.0,
+      "ma_cross": "死叉"
+    },
+    {
+      "code": "300750",
+      "name": "宁德时代",
+      "close": 365.34,
+      "pct_change": -2.8,
+      "regime": "mean_reversion",
+      "trend": "HOLD",
+      "reversion": "HOLD",
+      "llm": "SKIP",
+      "llm_reason": "",
+      "signal": "HOLD",
+      "score": 0.0,
+      "ma_cross": "金叉"
+    }
+  ],
+  "opportunities": {
+    "buy_signals": [
+      {
+        "code": "sz399006",
+        "name": "创业板指",
+        "close": 3275.96,
+        "pct_change": 0,
+        "regime": "trend_up",
+        "trend": "BUY",
+        "reversion": "HOLD",
+        "llm": "SKIP",
+        "llm_reason": "",
+        "signal": "BUY",
+        "score": 0.5,
+        "ma_cross": "金叉"
+      },
+      {
+        "code": "512880",
+        "name": "半导体ETF",
+        "close": 1.17,
+        "pct_change": -0.93,
+        "regime": "trend_down",
+        "trend": "HOLD",
+        "reversion": "BUY",
+        "llm": "SKIP",
+        "llm_reason": "",
+        "signal": "BUY",
+        "score": 0.5,
+        "ma_cross": "死叉"
+      },
+      {
+        "code": "159792",
+        "name": "科技创新ETF",
+        "close": 0.83,
+        "pct_change": -0.6,
+        "regime": "trend_down",
+        "trend": "HOLD",
+        "reversion": "BUY",
+        "llm": "SKIP",
+        "llm_reason": "",
+        "signal": "BUY",
+        "score": 0.5,
+        "ma_cross": "死叉"
+      }
+    ],
+    "sell_signals": [],
+    "watch_list": [
+      {
+        "code": "sh000001",
+        "name": "上证指数",
+        "signal": "HOLD",
+        "score": 0.0
+      },
+      {
+        "code": "sh000016",
+        "name": "上证50",
+        "signal": "HOLD",
+        "score": 0.0
+      },
+      {
+        "code": "sh000300",
+        "name": "沪深300",
+        "signal": "HOLD",
+        "score": 0.0
+      },
+      {
+        "code": "sz399001",
+        "name": "深证成指",
+        "signal": "HOLD",
+        "score": 0.0
+      },
+      {
+        "code": "sz399006",
+        "name": "创业板指",
+        "signal": "BUY",
+        "score": 0.5
+      },
+      {
+        "code": "510050",
+        "name": "上证50ETF",
+        "signal": "HOLD",
+        "score": 0.0
+      },
+      {
+        "code": "510300",
+        "name": "沪深300ETF",
+        "signal": "HOLD",
+        "score": 0.0
+      },
+      {
+        "code": "159919",
+        "name": "券商ETF",
+        "signal": "HOLD",
+        "score": 0.0
+      },
+      {
+        "code": "512880",
+        "name": "半导体ETF",
+        "signal": "BUY",
+        "score": 0.5
+      },
+      {
+        "code": "159995",
+        "name": "券商ETF",
+        "signal": "HOLD",
+        "score": 0.0
+      },
+      {
+        "code": "159792",
+        "name": "科技创新ETF",
+        "signal": "BUY",
+        "score": 0.5
+      },
+      {
+        "code": "515790",
+        "name": "光伏ETF",
+        "signal": "HOLD",
+        "score": 0.0
+      },
+      {
+        "code": "600519",
+        "name": "贵州茅台",
+        "signal": "HOLD",
+        "score": 0.0
+      },
+      {
+        "code": "000858",
+        "name": "五粮液",
+        "signal": "HOLD",
+        "score": 0.0
+      },
+      {
+        "code": "601318",
+        "name": "中国平安",
+        "signal": "HOLD",
+        "score": 0.0
+      },
+      {
+        "code": "600036",
+        "name": "招商银行",
+        "signal": "HOLD",
+        "score": 0.0
+      },
+      {
+        "code": "000333",
+        "name": "美的集团",
+        "signal": "HOLD",
+        "score": 0.0
+      },
+      {
+        "code": "002594",
+        "name": "比亚迪",
+        "signal": "HOLD",
+        "score": 0.0
+      },
+      {
+        "code": "300750",
+        "name": "宁德时代",
+        "signal": "HOLD",
+        "score": 0.0
+      }
+    ]
+  }
+}

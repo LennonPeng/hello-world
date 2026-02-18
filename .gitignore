@@ -1,0 +1,19 @@
+# OpenClaw files
+.clawhub/
+AGENTS.md
+BOOTSTRAP.md
+HEARTBEAT.md
+IDENTITY.md
+MEMORY.md
+SOUL.md
+TOOLS.md
+USER.md
+important-matters.md
+quant-env/
+scripts/
+skills/
+
+# Python
+__pycache__/
+*.pyc
+venv/
