@@ -382,7 +382,7 @@
                 // 碰撞检测
                 gameState.zombies.forEach(zombie => {
                     if (Math.abs(pea.x - zombie.x) < 25 && 
-                        Math.abs(pea.y - (zombie.row * GRID_SIZE + GRID_SIZE/2)) < 30) {
+                        Math.abs(pea.y - (CANVAS_HEIGHT * 0.15 + zombie.row * GRID_SIZE + GRID_SIZE/2)) < 30) {
                         zombie.hp -= pea.damage;
                         pea.hit = true;
                         if (pea.frozen) {
@@ -410,8 +410,7 @@
                 
                 // 伤害僵尸
                 gameState.zombies.forEach(zombie => {
-                    const dx = zombie.x - exp.x;
-                    const dy = zombie.row * GRID_SIZE + GRID_SIZE/2 - exp.y;
+                    const dy = zombie.row * GRID_SIZE + GRID_SIZE/2 - (CANVAS_HEIGHT * 0.15 + exp.y);
                     if (Math.sqrt(dx*dx + dy*dy) < exp.radius) {
                         zombie.hp -= exp.damage * deltaTime / 100;
                     }
