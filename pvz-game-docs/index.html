@@ -317,6 +317,8 @@
             requestAnimationFrame(gameLoop);
         }
         
+        let sunSpawnTimer = 0;
+        
         function update(deltaTime) {
             // 生成僵尸
             if (gameState.zombiesToSpawn > 0) {
@@ -330,6 +332,14 @@
                 gameState.wave++;
                 document.getElementById('wave-display').textContent = gameState.wave;
                 startWave();
+            }
+            
+            // 自然生成阳光（每10秒）
+            sunSpawnTimer += deltaTime;
+            if (sunSpawnTimer >= 10000) {
+                const randomX = Math.random() * (CANVAS_WIDTH - 100) + 50;
+                gameState.suns.push(new Sun(randomX, 50, true));
+                sunSpawnTimer = 0;
             }
             
             // 更新植物
