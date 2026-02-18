@@ -2,8 +2,8 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>植物大战僵尸 - 网页版</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>植物大战僵尸</title>
     <style>
         * {
             margin: 0;
@@ -11,22 +11,906 @@
             box-sizing: border-box;
         }
         
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
+        body {
             background: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Microsoft YaHei', sans-serif;
+            min-height: 100vh;
         }
         
-        #game-frame {
+        h1 {
+            color: #4CAF50;
+            margin: 10px 0;
+            font-size: clamp(18px, 5vw, 32px);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        #game-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 15%, #228B22 15%, #228B22 100%);
+            border: 4px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        #gameCanvas {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        
+        #ui-panel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px;
+            background: linear-gradient(to bottom, #444, #333);
+            border-radius: 0 0 8px 8px;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .stat {
+            color: white;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .sun-icon {
+            color: #FFD700;
+            font-size: 24px;
+        }
+        
+        #plant-cards {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .plant-card {
+            width: clamp(50px, 15vw, 70px);
+            height: clamp(60px, 15vw, 80px);
+            background: linear-gradient(to bottom, #666, #444);
+            border: 3px solid #888;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 5px;
+            transition: all 0.2s;
+            position: relative;
+            font-size: clamp(10px, 3vw, 14px);
+        }
+        
+        .plant-card:hover {
+            transform: scale(1.05);
+            border-color: #FFD700;
+        }
+        
+        .plant-card.selected {
+            border-color: #FFD700;
+            box-shadow: 0 0 15px #FFD700;
+        }
+        
+        .plant-card.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .plant-icon {
+            font-size: 32px;
+        }
+        
+        .plant-cost {
+            color: #FFD700;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .plant-key {
+            position: absolute;
+            top: -10px;
+            left: -5px;
+            background: #333;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        
+        #start-btn {
+            padding: 10px 30px;
+            font-size: 18px;
+            background: linear-gradient(to bottom, #4CAF50, #388E3C);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        #start-btn:hover {
+            background: linear-gradient(to bottom, #66BB6A, #4CAF50);
+            transform: scale(1.05);
+        }
+        
+        #instructions {
+            color: #aaa;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        #game-over {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        #game-over h2 {
+            font-size: 48px;
+            color: #f44336;
+            margin-bottom: 20px;
+        }
+        
+        #restart-btn {
+            padding: 15px 40px;
+            font-size: 20px;
+            background: #4CAF50;
+            color: white;
             border: none;
-            overflow: hidden;
+            border-radius: 8px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <iframe id="game-frame" src="https://game.moe.ms/" allowfullscreen></iframe>
+    <h1>🌻 植物大战僵尸 🌻</h1>
+    
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+        
+        <div id="game-over">
+            <h2>GAME OVER</h2>
+            <p id="final-score" style="font-size: 24px; margin-bottom: 20px;"></p>
+            <button id="restart-btn" onclick="restartGame()">重新开始</button>
+        </div>
+    </div>
+    
+    <div id="ui-panel">
+        <div class="stat">
+            <span class="sun-icon">☀</span>
+            <span id="sun-display">150</span>
+        </div>
+        
+        <div class="stat">
+            <span>🌊</span>
+            <span>波次: <span id="wave-display">1</span></span>
+        </div>
+        
+        <div class="stat">
+            <span>⭐</span>
+            <span>分数: <span id="score-display">0</span></span>
+        </div>
+        
+        <div id="plant-cards">
+            <div class="plant-card" data-plant="peashooter" data-cost="100" onclick="selectPlant(0)">
+                <span class="plant-key">1</span>
+                <span class="plant-icon">🟢</span>
+                <span class="plant-cost">100</span>
+            </div>
+            <div class="plant-card" data-plant="sunflower" data-cost="50" onclick="selectPlant(1)">
+                <span class="plant-key">2</span>
+                <span class="plant-icon">🌻</span>
+                <span class="plant-cost">50</span>
+            </div>
+            <div class="plant-card" data-plant="wallnut" data-cost="50" onclick="selectPlant(2)">
+                <span class="plant-key">3</span>
+                <span class="plant-icon">🥜</span>
+                <span class="plant-cost">50</span>
+            </div>
+            <div class="plant-card" data-plant="snowpea" data-cost="175" onclick="selectPlant(3)">
+                <span class="plant-key">4</span>
+                <span class="plant-icon">🧊</span>
+                <span class="plant-cost">175</span>
+            </div>
+            <div class="plant-card" data-plant="cherrybomb" data-cost="150" onclick="selectPlant(4)">
+                <span class="plant-key">5</span>
+                <span class="plant-icon">🍒</span>
+                <span class="plant-cost">150</span>
+            </div>
+        </div>
+    </div>
+    
+    <div id="instructions">
+        <p>🖱️ 点击卡片选择植物 → 点击草地放置 | ☀️ 点击阳光收集 | 数字键1-5快速选择</p>
+    </div>
+
+    <script>
+        // ========== 游戏配置 ==========
+        function getCanvasSize() {
+            const maxWidth = Math.min(window.innerWidth - 20, 900);
+            const maxHeight = Math.min(window.innerHeight - 200, 560);
+            const size = Math.min(maxWidth, maxHeight * 1.8);
+            return {
+                width: Math.max(320, size),
+                height: Math.max(240, size / 1.8)
+            };
+        }
+        
+        const canvasSize = getCanvasSize();
+        const CANVAS_WIDTH = canvasSize.width;
+        const CANVAS_HEIGHT = canvasSize.height;
+        const GRID_SIZE = CANVAS_WIDTH / 9;
+        const GRID_COLS = 9;
+        const GRID_ROWS = 5;
+        
+        const PLANTS_DATA = {
+            peashooter: { cost: 100, hp: 100, color: '#4CAF50', emoji: '🟢', cooldown: 1500 },
+            sunflower: { cost: 50, hp: 80, color: '#FFD700', emoji: '🌻', cooldown: 5000 },
+            wallnut: { cost: 50, hp: 400, color: '#8B4513', emoji: '🥜', cooldown: 0 },
+            snowpea: { cost: 175, hp: 100, color: '#03A9F4', emoji: '🧊', cooldown: 1500 },
+            cherrybomb: { cost: 150, hp: 1, color: '#f44336', emoji: '🍒', cooldown: 0 }
+        };
+        
+        // ========== 游戏状态 ==========
+        let canvas, ctx;
+        let gameState = {
+            sun: 150,
+            score: 0,
+            wave: 1,
+            plants: [],
+            zombies: [],
+            peas: [],
+            suns: [],
+            explosions: [],
+            selectedPlant: null,
+            gameOver: false,
+            lastTime: 0,
+            zombieSpawnTimer: 0,
+            zombiesToSpawn: 0,
+            grid: []
+        };
+        
+        // ========== 初始化 ==========
+        function init() {
+            canvas = document.getElementById('gameCanvas');
+            ctx = canvas.getContext('2d');
+            
+            // 设置画布大小
+            canvas.width = CANVAS_WIDTH;
+            canvas.height = CANVAS_HEIGHT;
+            
+            // 初始化网格
+            for (let row = 0; row < GRID_ROWS; row++) {
+                gameState.grid[row] = [];
+                for (let col = 0; col < GRID_COLS; col++) {
+                    gameState.grid[row][col] = null;
+                }
+            }
+            
+            // 绑定事件
+            canvas.addEventListener('click', handleCanvasClick);
+            canvas.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                gameState.selectedPlant = null;
+                updateCardSelection();
+            });
+            
+            document.addEventListener('keydown', handleKeyDown);
+            
+            // 开始游戏
+            startWave();
+            requestAnimationFrame(gameLoop);
+        }
+        
+        function startWave() {
+            gameState.zombiesToSpawn = 3 + gameState.wave * 2;
+        }
+        
+        // ========== 游戏循环 ==========
+        function gameLoop(timestamp) {
+            if (gameState.gameOver) return;
+            
+            const deltaTime = timestamp - gameState.lastTime;
+            gameState.lastTime = timestamp;
+            
+            update(deltaTime);
+            render();
+            
+            requestAnimationFrame(gameLoop);
+        }
+        
+        let sunSpawnTimer = 0;
+        
+        function update(deltaTime) {
+            // 生成僵尸
+            if (gameState.zombiesToSpawn > 0) {
+                gameState.zombieSpawnTimer += deltaTime;
+                if (gameState.zombieSpawnTimer >= 3000) {
+                    spawnZombie();
+                    gameState.zombieSpawnTimer = 0;
+                }
+            } else if (gameState.zombies.length === 0) {
+                // 波次完成
+                gameState.wave++;
+                document.getElementById('wave-display').textContent = gameState.wave;
+                startWave();
+            }
+            
+            // 自然生成阳光（每10秒）
+            sunSpawnTimer += deltaTime;
+            if (sunSpawnTimer >= 10000) {
+                const randomX = Math.random() * (CANVAS_WIDTH - 100) + 50;
+                gameState.suns.push(new Sun(randomX, 50, true));
+                sunSpawnTimer = 0;
+            }
+            
+            // 更新植物
+            gameState.plants.forEach(plant => {
+                plant.update(deltaTime);
+            });
+            
+            // 更新僵尸
+            gameState.zombies.forEach((zombie, index) => {
+                zombie.update(deltaTime);
+                
+                // 检测植物碰撞
+                gameState.plants.forEach(plant => {
+                    if (plant.row === zombie.row && 
+                        Math.abs(zombie.x - plant.x) < 30) {
+                        zombie.eating = true;
+                        plant.hp -= zombie.damage * deltaTime / 1000;
+                    }
+                });
+                
+                // 到达左侧
+                if (zombie.x < -30) {
+                    gameOver();
+                }
+            });
+            
+            // 移除死亡植物
+            gameState.plants = gameState.plants.filter(plant => {
+                if (plant.hp <= 0) {
+                    gameState.grid[plant.row][plant.col] = null;
+                    return false;
+                }
+                return true;
+            });
+            
+            // 移除死亡僵尸
+            gameState.zombies = gameState.zombies.filter(zombie => {
+                if (zombie.hp <= 0) {
+                    gameState.score += 10;
+                    document.getElementById('score-display').textContent = gameState.score;
+                    return false;
+                }
+                return true;
+            });
+            
+            // 更新豌豆
+            gameState.peas.forEach(pea => {
+                pea.update();
+                
+                // 碰撞检测
+                gameState.zombies.forEach(zombie => {
+                    if (Math.abs(pea.x - zombie.x) < 25 && 
+                        Math.abs(pea.y - (CANVAS_HEIGHT * 0.15 + zombie.row * GRID_SIZE + GRID_SIZE/2)) < 30) {
+                        zombie.hp -= pea.damage;
+                        pea.hit = true;
+                        if (pea.frozen) {
+                            zombie.frozen = true;
+                            zombie.frozenTimer = 5000;
+                        }
+                    }
+                });
+            });
+            
+            // 移除击中或出屏的豌豆
+            gameState.peas = gameState.peas.filter(pea => !pea.hit && pea.x < CANVAS_WIDTH);
+            
+            // 更新阳光
+            gameState.suns.forEach(sun => {
+                sun.update();
+            });
+            
+            // 移除收集的阳光
+            gameState.suns = gameState.suns.filter(sun => !sun.collected);
+            
+            // 更新爆炸
+            gameState.explosions.forEach(exp => {
+                exp.update();
+                
+                // 伤害僵尸
+                gameState.zombies.forEach(zombie => {
+                    const dy = zombie.row * GRID_SIZE + GRID_SIZE/2 - (CANVAS_HEIGHT * 0.15 + exp.y);
+                    if (Math.sqrt(dx*dx + dy*dy) < exp.radius) {
+                        zombie.hp -= exp.damage * deltaTime / 100;
+                    }
+                });
+            });
+            
+            gameState.explosions = gameState.explosions.filter(exp => !exp.done);
+            
+            // 更新卡片状态
+            updateCardStates();
+        }
+        
+        function render() {
+            // 清空画布
+            ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+            
+            // 绘制背景
+            // 天空
+            ctx.fillStyle = '#87CEEB';
+            ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT * 0.15);
+            
+            // 草地
+            ctx.fillStyle = '#228B22';
+            ctx.fillRect(0, CANVAS_HEIGHT * 0.15, CANVAS_WIDTH, CANVAS_HEIGHT * 0.85);
+            
+            // 绘制网格
+            for (let row = 0; row < GRID_ROWS; row++) {
+                for (let col = 0; col < GRID_COLS; col++) {
+                    ctx.strokeStyle = 'rgba(0,0,0,0.2)';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(col * GRID_SIZE, CANVAS_HEIGHT * 0.15 + row * GRID_SIZE, GRID_SIZE, GRID_SIZE);
+                }
+            }
+            
+            // 绘制植物
+            gameState.plants.forEach(plant => plant.render(ctx));
+            
+            // 绘制僵尸
+            gameState.zombies.forEach(zombie => zombie.render(ctx));
+            
+            // 绘制豌豆
+            gameState.peas.forEach(pea => pea.render(ctx));
+            
+            // 绘制阳光
+            gameState.suns.forEach(sun => sun.render(ctx));
+            
+            // 绘制爆炸
+            gameState.explosions.forEach(exp => exp.render(ctx));
+            
+            // 绘制选中位置
+            if (gameState.selectedPlant) {
+                // 这里可以添加预览效果
+            }
+        }
+        
+        // ========== 植物类 ==========
+        class Plant {
+            constructor(type, col, row) {
+                this.type = type;
+                this.col = col;
+                this.row = row;
+                this.x = col * GRID_SIZE + GRID_SIZE / 2;
+                this.y = CANVAS_HEIGHT * 0.15 + row * GRID_SIZE + GRID_SIZE / 2;
+                
+                const data = PLANTS_DATA[type];
+                this.hp = data.hp;
+                this.maxHp = data.hp;
+                this.cooldown = data.cooldown;
+                this.lastAction = 0;
+            }
+            
+            update(deltaTime) {
+                const now = performance.now();
+                
+                if (this.type === 'peashooter' || this.type === 'snowpea') {
+                    // 检查同一行是否有僵尸
+                    const hasZombie = gameState.zombies.some(z => z.row === this.row && z.x > this.x);
+                    
+                    if (hasZombie && now - this.lastAction >= this.cooldown) {
+                        this.shoot();
+                        this.lastAction = now;
+                    }
+                } else if (this.type === 'sunflower') {
+                    if (now - this.lastAction >= this.cooldown) {
+                        this.produce();
+                        this.lastAction = now;
+                    }
+                } else if (this.type === 'cherrybomb') {
+                    // 立即爆炸
+                    createExplosion(this.x, this.y);
+                    gameState.grid[this.row][this.col] = null;
+                    const index = gameState.plants.indexOf(this);
+                    if (index > -1) gameState.plants.splice(index, 1);
+                }
+            }
+            
+            shoot() {
+                const type = this.type === 'snowpea' ? 'ice' : 'normal';
+                gameState.peas.push(new Pea(this.x + 30, this.y, type));
+            }
+            
+            produce() {
+                gameState.suns.push(new Sun(this.x, this.y - 20, false));
+            }
+            
+            render(ctx) {
+                const data = PLANTS_DATA[this.type];
+                
+                // 植物身体
+                ctx.font = '40px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(data.emoji, this.x, this.y);
+                
+                // 血条
+                const hpRatio = this.hp / this.maxHp;
+                const barWidth = 60;
+                ctx.fillStyle = '#333';
+                ctx.fillRect(this.x - barWidth/2, this.y - 35, barWidth, 6);
+                ctx.fillStyle = hpRatio > 0.5 ? '#4CAF50' : hpRatio > 0.25 ? '#FF9800' : '#f44336';
+                ctx.fillRect(this.x - barWidth/2, this.y - 35, barWidth * hpRatio, 6);
+            }
+        }
+        
+        // ========== 僵尸类 ==========
+        class Zombie {
+            constructor(row) {
+                this.row = row;
+                this.x = CANVAS_WIDTH + 50;
+                this.y = CANVAS_HEIGHT * 0.15 + row * GRID_SIZE + 10;
+                
+                const rand = Math.random();
+                if (rand < 0.7) {
+                    this.hp = 100;
+                    this.speed = 0.3;
+                    this.emoji = '🧟';
+                } else if (rand < 0.9) {
+                    this.hp = 200;
+                    this.speed = 0.25;
+                    this.emoji = '🧟‍♂️';
+                } else {
+                    this.hp = 400;
+                    this.speed = 0.2;
+                    this.emoji = '🧙';
+                }
+                
+                this.maxHp = this.hp;
+                this.damage = 20;
+                this.eating = false;
+                this.frozen = false;
+                this.frozenTimer = 0;
+            }
+            
+            update(deltaTime) {
+                if (!this.eating) {
+                    const speed = this.frozen ? this.speed * 0.5 : this.speed;
+                    this.x -= speed * deltaTime / 16;
+                }
+                
+                if (this.frozen) {
+                    this.frozenTimer -= deltaTime;
+                    if (this.frozenTimer <= 0) {
+                        this.frozen = false;
+                    }
+                }
+            }
+            
+            render(ctx) {
+                // 绘制僵尸
+                ctx.font = '45px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                if (this.frozen) {
+                    ctx.globalAlpha = 0.7;
+                }
+                ctx.fillText(this.emoji, this.x, this.y + 15);
+                ctx.globalAlpha = 1;
+                
+                // 血条
+                const hpRatio = this.hp / this.maxHp;
+                const barWidth = 50;
+                ctx.fillStyle = '#333';
+                ctx.fillRect(this.x - barWidth/2, this.y - 20, barWidth, 5);
+                ctx.fillStyle = hpRatio > 0.5 ? '#4CAF50' : '#f44336';
+                ctx.fillRect(this.x - barWidth/2, this.y - 20, barWidth * hpRatio, 5);
+            }
+        }
+        
+        // ========== 豌豆类 ==========
+        class Pea {
+            constructor(x, y, type) {
+                this.x = x;
+                this.y = y;
+                this.type = type;
+                this.speed = 6;
+                this.damage = 20;
+                this.hit = false;
+            }
+            
+            update() {
+                this.x += this.speed;
+            }
+            
+            render(ctx) {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 8, 0, Math.PI * 2);
+                ctx.fillStyle = this.type === 'ice' ? '#80DEEA' : '#4CAF50';
+                ctx.fill();
+                ctx.strokeStyle = '#2E7D32';
+                ctx.stroke();
+            }
+        }
+        
+        // ========== 阳光类 ==========
+        class Sun {
+            constructor(x, y, falling = true) {
+                this.x = x;
+                this.y = y;
+                this.targetY = y;
+                this.falling = falling;
+                this.flying = false;
+                this.collected = false;
+                this.size = 40;
+                
+                if (falling) {
+                    this.targetY = CANVAS_HEIGHT * 0.15 + Math.floor(Math.random() * 4) * GRID_SIZE + 50;
+                }
+            }
+            
+            update() {
+                if (this.falling && this.y < this.targetY) {
+                    this.y += 2;
+                } else if (this.falling) {
+                    this.falling = false;
+                }
+                
+                if (this.flying) {
+                    const dx = 80 - this.x;
+                    const dy = 50 - this.y;
+                    this.x += dx * 0.1;
+                    this.y += dy * 0.1;
+                    
+                    if (Math.abs(dx) < 5 && Math.abs(dy) < 5) {
+                        this.collected = true;
+                        gameState.sun += 25;
+                        updateSunDisplay();
+                    }
+                }
+            }
+            
+            render(ctx) {
+                // 阳光光芒
+                ctx.fillStyle = '#FFD700';
+                for (let i = 0; i < 8; i++) {
+                    const angle = (i * 45 + performance.now() / 50) * Math.PI / 180;
+                    const x2 = this.x + 25 * Math.cos(angle);
+                    const y2 = this.y + 25 * Math.sin(angle);
+                    ctx.beginPath();
+                    ctx.moveTo(this.x, this.y);
+                    ctx.lineTo(x2, y2);
+                    ctx.strokeStyle = '#FFD700';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+                
+                // 阳光中心
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 15, 0, Math.PI * 2);
+                ctx.fillStyle = '#FFD700';
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 10, 0, Math.PI * 2);
+                ctx.fillStyle = '#FFF59D';
+                ctx.fill();
+            }
+        }
+        
+        // ========== 爆炸类 ==========
+        class Explosion {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.radius = 10;
+                this.maxRadius = 150;
+                this.expanding = true;
+                this.damage = 1800;
+                this.done = false;
+            }
+            
+            update() {
+                if (this.expanding) {
+                    this.radius += 10;
+                    if (this.radius >= this.maxRadius) {
+                        this.expanding = false;
+                    }
+                } else {
+                    this.radius -= 10;
+                    if (this.radius <= 0) {
+                        this.done = true;
+                    }
+                }
+            }
+            
+            render(ctx) {
+                const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
+                gradient.addColorStop(0, 'rgba(255, 200, 0, 0.8)');
+                gradient.addColorStop(0.5, 'rgba(255, 100, 0, 0.5)');
+                gradient.addColorStop(1, 'rgba(255, 0, 0, 0)');
+                
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = gradient;
+                ctx.fill();
+            }
+        }
+        
+        function createExplosion(x, y) {
+            gameState.explosions.push(new Explosion(x, y));
+        }
+        
+        function spawnZombie() {
+            const row = Math.floor(Math.random() * GRID_ROWS);
+            gameState.zombies.push(new Zombie(row));
+            gameState.zombiesToSpawn--;
+        }
+        
+        // ========== 用户交互 ==========
+        function selectPlant(index) {
+            const cards = document.querySelectorAll('.plant-card');
+            const card = cards[index];
+            const cost = parseInt(card.dataset.cost);
+            
+            if (gameState.sun >= cost) {
+                gameState.selectedPlant = {
+                    type: card.dataset.plant,
+                    cost: cost
+                };
+                updateCardSelection();
+            }
+        }
+        
+        function updateCardSelection() {
+            const cards = document.querySelectorAll('.plant-card');
+            cards.forEach(card => card.classList.remove('selected'));
+            
+            if (gameState.selectedPlant) {
+                const index = ['peashooter', 'sunflower', 'wallnut', 'snowpea', 'cherrybomb'].indexOf(gameState.selectedPlant.type);
+                cards[index].classList.add('selected');
+            }
+        }
+        
+        function updateCardStates() {
+            const cards = document.querySelectorAll('.plant-card');
+            cards.forEach(card => {
+                const cost = parseInt(card.dataset.cost);
+                if (gameState.sun < cost) {
+                    card.classList.add('disabled');
+                } else {
+                    card.classList.remove('disabled');
+                }
+            });
+        }
+        
+        function handleCanvasClick(e) {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // 检查是否点击阳光
+            for (const sun of gameState.suns) {
+                if (!sun.flying) {
+                    const dx = x - sun.x;
+                    const dy = y - sun.y;
+                    if (Math.sqrt(dx*dx + dy*dy) < 30) {
+                        sun.flying = true;
+                        return;
+                    }
+                }
+            }
+            
+            // 检查是否点击网格放置植物
+            if (y > CANVAS_HEIGHT * 0.15) {
+                const col = Math.floor(x / GRID_SIZE);
+                const row = Math.floor((y - CANVAS_HEIGHT * 0.15) / GRID_SIZE);
+                
+                if (col >= 0 && col < GRID_COLS && row >= 0 && row < GRID_ROWS) {
+                    if (!gameState.grid[row][col] && gameState.selectedPlant) {
+                        // 检查花费
+                        if (gameState.sun >= gameState.selectedPlant.cost) {
+                            // 放置植物
+                            const plant = new Plant(gameState.selectedPlant.type, col, row);
+                            gameState.plants.push(plant);
+                            gameState.grid[row][col] = plant;
+                            
+                            // 扣除阳光
+                            gameState.sun -= gameState.selectedPlant.cost;
+                            updateSunDisplay();
+                            
+                            // 取消选择
+                            gameState.selectedPlant = null;
+                            updateCardSelection();
+                        }
+                    }
+                }
+            }
+        }
+        
+        function handleKeyDown(e) {
+            const keyMap = {'1': 0, '2': 1, '3': 2, '4': 3, '5': 4};
+            if (keyMap[e.key] !== undefined) {
+                selectPlant(keyMap[e.key]);
+            } else if (e.key === 'Escape') {
+                gameState.selectedPlant = null;
+                updateCardSelection();
+            }
+        }
+        
+        function updateSunDisplay() {
+            document.getElementById('sun-display').textContent = gameState.sun;
+        }
+        
+        function gameOver() {
+            gameState.gameOver = true;
+            document.getElementById('game-over').style.display = 'flex';
+            document.getElementById('final-score').textContent = `最终分数: ${gameState.score}`;
+        }
+        
+        function restartGame() {
+            // 重置游戏状态
+            gameState = {
+                sun: 150,
+                score: 0,
+                wave: 1,
+                plants: [],
+                zombies: [],
+                peas: [],
+                suns: [],
+                explosions: [],
+                selectedPlant: null,
+                gameOver: false,
+                lastTime: performance.now(),
+                zombieSpawnTimer: 0,
+                zombiesToSpawn: 0,
+                grid: []
+            };
+            
+            for (let row = 0; row < GRID_ROWS; row++) {
+                gameState.grid[row] = [];
+                for (let col = 0; col < GRID_COLS; col++) {
+                    gameState.grid[row][col] = null;
+                }
+            }
+            
+            document.getElementById('sun-display').textContent = '150';
+            document.getElementById('score-display').textContent = '0';
+            document.getElementById('wave-display').textContent = '1';
+            document.getElementById('game-over').style.display = 'none';
+            
+            startWave();
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // 启动游戏
+        window.onload = init;
+    </script>
 </body>
 </html>
