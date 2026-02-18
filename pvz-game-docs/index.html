@@ -251,11 +251,11 @@
         // ========== 游戏配置 ==========
         function getCanvasSize() {
             const maxWidth = Math.min(window.innerWidth - 20, 900);
-            const maxHeight = Math.min(window.innerHeight - 200, 500);
+            const maxHeight = Math.min(window.innerHeight - 200, 560);
             const size = Math.min(maxWidth, maxHeight * 1.8);
             return {
                 width: Math.max(320, size),
-                height: Math.max(200, size / 1.8)
+                height: Math.max(240, size / 1.8)
             };
         }
         
@@ -264,7 +264,7 @@
         const CANVAS_HEIGHT = canvasSize.height;
         const GRID_SIZE = CANVAS_WIDTH / 9;
         const GRID_COLS = 9;
-        const GRID_ROWS = 4;
+        const GRID_ROWS = 5;
         
         const PLANTS_DATA = {
             peashooter: { cost: 100, hp: 100, color: '#4CAF50', emoji: '🟢', cooldown: 1500 },
